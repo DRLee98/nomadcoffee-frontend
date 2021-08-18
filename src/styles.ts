@@ -1,5 +1,13 @@
 import { createGlobalStyle, DefaultTheme } from "styled-components";
 import reset from "styled-reset";
+import { CommonTheme } from "./styled";
+
+const commonTheme: CommonTheme = {
+  maxWidth: "930px",
+  BtnTextColor: "white",
+  greenBtnColor: "#36b33b",
+  redBtnColor: "#f14635",
+};
 
 export const lightTheme: DefaultTheme = {
   fontColor: "#2c2c2c",
@@ -10,6 +18,7 @@ export const lightTheme: DefaultTheme = {
   errorColor: "#ff6565",
   wrapperBg: "white",
   darkModeBtn: "#673ab7",
+  ...commonTheme,
 };
 
 export const darkTheme: DefaultTheme = {
@@ -21,6 +30,7 @@ export const darkTheme: DefaultTheme = {
   errorColor: "#ff6565",
   wrapperBg: "#191919a1",
   darkModeBtn: "#ff9800",
+  ...commonTheme,
 };
 
 export const GlobalStyles = createGlobalStyle`

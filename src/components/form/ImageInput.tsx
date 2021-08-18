@@ -53,6 +53,7 @@ export const ImageInput: React.FC<ImageInputProps> = ({
         {...register("file")}
         id="file"
         type="file"
+        accept=".png, .jpg, .jepg"
         //onChange={handleOnChange}
       />
     </FileInputBox>

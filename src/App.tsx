@@ -9,8 +9,17 @@ import { ThemeProvider } from "styled-components";
 import { HelmetProvider } from "react-helmet-async";
 import { darkTheme, GlobalStyles, lightTheme } from "./styles";
 import routes from "./routes";
+import Layout from "./components/Layout";
+import AddShop from "./screens/AddShop";
+import ShopDetail from "./screens/ShopDetail";
+import EditShop from "./screens/EditShop";
 
-const loggedInRouter = [{ path: routes.home, screen: <Home /> }];
+const loggedInRouter = [
+  { path: routes.home, screen: <Home /> },
+  { path: routes.addShop, screen: <AddShop /> },
+  { path: routes.shopDetail(), screen: <ShopDetail /> },
+  { path: routes.editShop(), screen: <EditShop /> },
+];
 
 const loggedOutRouter = [
   { path: routes.home, screen: <Login /> },
@@ -30,7 +39,7 @@ function App() {
               {isLoggedIn
                 ? loggedInRouter.map((route) => (
                     <Route key={route.path} path={route.path} exact>
-                      {route.screen}
+                      <Layout>{route.screen}</Layout>
                     </Route>
                   ))
                 : loggedOutRouter.map((route) => (

@@ -30,6 +30,7 @@ export const toggleDarkMode = () => {
 
 const httpLink = createUploadLink({
   uri: "https://nomad-coffee-backend-0126.herokuapp.com/graphql",
+  // uri: "http://localhost:4000/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {

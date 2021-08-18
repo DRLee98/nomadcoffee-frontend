@@ -1,7 +1,7 @@
 import React, { MouseEventHandler } from "react";
 import DaumPostcode, { AddressData } from "react-daum-postcode";
 import styled from "styled-components";
-//import { getLatLng } from "./kakaoMap";
+import { getLatLng } from "./kakaoMap";
 
 const LayerBackGround = styled.div`
   position: fixed;
@@ -41,7 +41,8 @@ export const Postcode: React.FC<PostcodeProps> = ({
   closePostcode,
 }) => {
   const handleComplete = async (data: AddressData) => {
-    setAddressResult(data?.address);
+    const { lat, lng } = await getLatLng(data.address);
+    setAddressResult({ ...data, lat, lng });
   };
 
   const styles = {

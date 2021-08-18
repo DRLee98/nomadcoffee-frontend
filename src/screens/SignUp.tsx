@@ -90,7 +90,7 @@ function SignUp() {
     watch,
   } = useForm<ISignUpForm>({
     mode: "onBlur",
-    reValidateMode: "onChange",
+    reValidateMode: "onBlur",
   });
   const history = useHistory();
   const onCompleted = (data: createAccountMutation) => {
