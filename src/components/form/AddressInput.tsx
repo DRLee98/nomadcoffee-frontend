@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { MouseEvent, useState } from "react";
 import { AddressData } from "react-daum-postcode";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { Postcode } from "../../kakao/postCode";
 import { SButton } from "./Button";
 import { Input } from "./formShared";
