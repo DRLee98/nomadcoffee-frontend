@@ -7,34 +7,41 @@
 // GraphQL query operation: seeCoffeeShopsQuery
 // ====================================================
 
-export interface seeCoffeeShopsQuery_seeCoffeeShops_user {
+export interface seeCoffeeShopsQuery_seeCoffeeShops_shops_user {
   __typename: "User";
   id: number;
   avatarURL: string | null;
 }
 
-export interface seeCoffeeShopsQuery_seeCoffeeShops_photos {
+export interface seeCoffeeShopsQuery_seeCoffeeShops_shops_photos {
   __typename: "CoffeeShopPhoto";
   url: string;
 }
 
-export interface seeCoffeeShopsQuery_seeCoffeeShops_categories {
+export interface seeCoffeeShopsQuery_seeCoffeeShops_shops_categories {
   __typename: "Category";
   name: string;
   slug: string;
 }
 
-export interface seeCoffeeShopsQuery_seeCoffeeShops {
+export interface seeCoffeeShopsQuery_seeCoffeeShops_shops {
   __typename: "CoffeeShop";
   id: number;
   name: string;
-  user: seeCoffeeShopsQuery_seeCoffeeShops_user;
-  photos: (seeCoffeeShopsQuery_seeCoffeeShops_photos | null)[] | null;
-  categories: (seeCoffeeShopsQuery_seeCoffeeShops_categories | null)[] | null;
+  user: seeCoffeeShopsQuery_seeCoffeeShops_shops_user;
+  photos: (seeCoffeeShopsQuery_seeCoffeeShops_shops_photos | null)[] | null;
+  categories: (seeCoffeeShopsQuery_seeCoffeeShops_shops_categories | null)[] | null;
+}
+
+export interface seeCoffeeShopsQuery_seeCoffeeShops {
+  __typename: "seeCoffeeShopsResult";
+  totalPage: number;
+  totalCount: number;
+  shops: seeCoffeeShopsQuery_seeCoffeeShops_shops[] | null;
 }
 
 export interface seeCoffeeShopsQuery {
-  seeCoffeeShops: (seeCoffeeShopsQuery_seeCoffeeShops | null)[] | null;
+  seeCoffeeShops: seeCoffeeShopsQuery_seeCoffeeShops | null;
 }
 
 export interface seeCoffeeShopsQueryVariables {

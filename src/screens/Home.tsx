@@ -10,18 +10,22 @@ import { seeCoffeeShopsQuery } from "../__generated__/seeCoffeeShopsQuery";
 export const SEE_COFFEE_SHOPS_QUERY = gql`
   query seeCoffeeShopsQuery($page: Int) {
     seeCoffeeShops(page: $page) {
-      id
-      name
-      user {
+      totalPage
+      totalCount
+      shops {
         id
-        avatarURL
-      }
-      photos {
-        url
-      }
-      categories {
         name
-        slug
+        user {
+          id
+          avatarURL
+        }
+        photos {
+          url
+        }
+        categories {
+          name
+          slug
+        }
       }
     }
   }
@@ -106,7 +110,7 @@ function Home() {
     <Container>
       <PageTitle title={"Home"} />
       <ShopList>
-        {data?.seeCoffeeShops?.map((shop) => (
+        {data?.seeCoffeeShops?.shops?.map((shop) => (
           <ShopItem key={shop?.id}>
             <SLink to={routes.shopDetail(shop?.id)}>
               <ShopMain>

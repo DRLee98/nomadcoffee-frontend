@@ -22,6 +22,7 @@ export interface createCoffeeShopMutationVariables {
   name: string;
   latitude?: string | null;
   longitude?: string | null;
+  address?: string | null;
   categories?: string | null;
   photos?: (any | null)[] | null;
 }

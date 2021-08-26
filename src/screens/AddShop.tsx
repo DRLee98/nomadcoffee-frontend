@@ -20,6 +20,7 @@ const CREATE_COFFEE_SHOP_MUTATION = gql`
     $name: String!
     $latitude: String
     $longitude: String
+    $address: String
     $categories: String
     $photos: [Upload]
   ) {
@@ -27,6 +28,7 @@ const CREATE_COFFEE_SHOP_MUTATION = gql`
       name: $name
       latitude: $latitude
       longitude: $longitude
+      address: $address
       categories: $categories
       photos: $photos
     ) {
@@ -88,7 +90,14 @@ function AddShop() {
     if (loading) {
       return;
     }
-    const { name, latitude, longitude, categories, files } = data;
+    const {
+      name,
+      latitude,
+      longitude,
+      location: address,
+      categories,
+      files,
+    } = data;
     const photos = [];
     for (let i = 0; i < files.length; i++) {
       photos.push(files[i]);
@@ -98,6 +107,7 @@ function AddShop() {
         name,
         latitude: latitude + "",
         longitude: longitude + "",
+        address,
         categories,
         photos,
       },
