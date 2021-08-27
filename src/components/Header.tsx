@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { siteName } from "../constants";
 import useMe from "../hook/useMe";
 import routes from "../routes";
+import DarkModeBtn from "./DarkMode";
 import { Image } from "./shared";
 
 const SHeader = styled.header`
@@ -13,6 +14,7 @@ const SHeader = styled.header`
   display: flex;
   align-items: center;
   justify-content: center;
+  color: ${(props) => props.theme.fontColor};
 `;
 
 const Wrapper = styled.div`
@@ -40,6 +42,13 @@ const SLink = styled(Link)`
   }
 `;
 
+const ProfileLink = styled(Link)`
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 const Header = () => {
   const { data } = useMe();
   const me = data?.me;
@@ -53,7 +62,10 @@ const Header = () => {
         </Box>
         <Box>
           <SLink to={routes.addShop}>Add Shop</SLink>
-          <Image src={me?.avatarURL || ""} sizes={"25px"} />
+          <ProfileLink to={routes.myProfile}>
+            <Image src={me?.avatarURL || ""} sizes={"25px"} />
+          </ProfileLink>
+          <DarkModeBtn />
         </Box>
       </Wrapper>
     </SHeader>

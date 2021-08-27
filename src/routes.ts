@@ -4,6 +4,7 @@ interface routesType {
   addShop: string;
   shopDetail: Function;
   editShop: Function;
+  myProfile: string;
 }
 
 const routes: routesType = {
@@ -12,6 +13,7 @@ const routes: routesType = {
   addShop: "/add",
   shopDetail: (id: string) => (id ? `/shop/${id}` : "/shop/:id"),
   editShop: (id: string) => (id ? `/shop/${id}/edit` : "/shop/:id/edit"),
+  myProfile: "/profile",
 };
 
 export default routes;

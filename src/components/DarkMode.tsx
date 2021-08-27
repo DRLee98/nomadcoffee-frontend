@@ -6,6 +6,7 @@ import { darkModeVar, toggleDarkMode } from "../apollo";
 
 const Icon = styled.span`
   color: ${(props) => props.theme.darkModeBtn};
+  cursor: pointer;
 `;
 
 const DarkModeBtn = () => {

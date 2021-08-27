@@ -1,6 +1,7 @@
 import { gql, useQuery } from "@apollo/client";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { Loading } from "../components/Loading";
 import PageTitle from "../components/PageTitle";
 import { Image } from "../components/shared";
 import { Slider } from "../components/Slider";
@@ -42,10 +43,14 @@ const ShopList = styled.ul`
   gap: 60px 20px;
 `;
 
-const ShopItem = styled.li``;
+const ShopItem = styled.li`
+  border: 1px solid ${(props) => props.theme.disabledBg};
+  padding: 10px;
+`;
 
 const ShopMain = styled.div`
   position: relative;
+  margin-bottom: 5px;
 `;
 
 const ShopName = styled.strong`
@@ -78,6 +83,7 @@ const SmallImage = styled.img`
 const CategoryItem = styled.li`
   border-radius: 20px;
   border: 1px solid ${(props) => props.theme.accent};
+  font-weight: bold;
   color: ${(props) => props.theme.accent};
   padding: 5px 15px;
   & + & {
@@ -105,8 +111,9 @@ function Home() {
   const { data, loading } = useQuery<seeCoffeeShopsQuery>(
     SEE_COFFEE_SHOPS_QUERY,
   );
-  console.log(data);
-  return (
+  return loading ? (
+    <Loading />
+  ) : (
     <Container>
       <PageTitle title={"Home"} />
       <ShopList>
@@ -121,13 +128,6 @@ function Home() {
                 </UserBox>
               </ShopMain>
             </SLink>
-            <Slider slideWidth={100}>
-              {shop?.photos?.map((photo) => (
-                <ImageItem key={`photo${photo?.url}`}>
-                  <SmallImage src={photo?.url} />
-                </ImageItem>
-              ))}
-            </Slider>
             <Slider slideWidth={100}>
               {shop?.categories?.map((category) => (
                 <CategoryItem key={`category${category?.name}_${shop?.id}`}>

@@ -1,5 +1,10 @@
 import { ApolloProvider, useReactiveVar } from "@apollo/client";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Route,
+  Switch,
+} from "react-router-dom";
 import Home from "./screens/Home";
 import Login from "./screens/Login";
 import SignUp from "./screens/SignUp";
@@ -13,12 +18,14 @@ import Layout from "./components/Layout";
 import AddShop from "./screens/AddShop";
 import ShopDetail from "./screens/ShopDetail";
 import EditShop from "./screens/EditShop";
+import Profile from "./screens/Profile";
 
 const loggedInRouter = [
   { path: routes.home, screen: <Home /> },
   { path: routes.addShop, screen: <AddShop /> },
   { path: routes.shopDetail(), screen: <ShopDetail /> },
   { path: routes.editShop(), screen: <EditShop /> },
+  { path: routes.myProfile, screen: <Profile /> },
 ];
 
 const loggedOutRouter = [
@@ -47,9 +54,15 @@ function App() {
                       {route.screen}
                     </Route>
                   ))}
-              <Route>
-                <NotFound />
-              </Route>
+              {isLoggedIn ? (
+                <Route>
+                  <Layout>
+                    <NotFound />
+                  </Layout>
+                </Route>
+              ) : (
+                <Redirect to={routes.home} />
+              )}
             </Switch>
           </Router>
         </ThemeProvider>

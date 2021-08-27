@@ -18,4 +18,5 @@ export interface CommonTheme {
   BtnTextColor: string;
   greenBtnColor: string;
   redBtnColor: string;
+  grayColor: string;
 }

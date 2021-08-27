@@ -6,3 +6,11 @@ export const Image = styled.img`
   border-radius: 999px;
   background-color: lightgray;
 `;
+
+export const Btn = styled.button`
+  text-align: center;
+  color: ${(props) => props.theme.BtnTextColor};
+  padding: 10px 25px;
+  border-radius: 5px;
+  cursor: pointer;
+`;

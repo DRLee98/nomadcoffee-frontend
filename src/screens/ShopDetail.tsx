@@ -1,7 +1,7 @@
 import { gql, useApolloClient, useMutation, useQuery } from "@apollo/client";
 import styled from "styled-components";
 import { useHistory, useParams } from "react-router-dom";
-import { Image } from "../components/shared";
+import { Btn, Image } from "../components/shared";
 import { Slider } from "../components/Slider";
 import { seeCoffeeShopQuery } from "../__generated__/seeCoffeeShopQuery";
 import { useEffect, useState } from "react";
@@ -13,6 +13,7 @@ import {
 } from "../__generated__/deleteCoffeeShopMutation";
 import { SEE_COFFEE_SHOPS_QUERY } from "./Home";
 import PageTitle from "../components/PageTitle";
+import { Loading } from "../components/Loading";
 
 export const SEE_COFFEE_SHOP_QUERY = gql`
   query seeCoffeeShopQuery($id: Int!) {
@@ -58,6 +59,7 @@ const ShopName = styled.strong`
   display: block;
   text-align: center;
   padding: 10px;
+  color: ${(props) => props.theme.fontColor};
   background-color: ${(props) => props.theme.hoverColor};
 `;
 
@@ -99,9 +101,10 @@ const CategoryItem = styled.li`
 `;
 
 const UserBox = styled.div`
-  background-color: rgb(255 255 255 / 30%);
+  color: ${(props) => props.theme.fontColor};
+  //background-color: rgb(255 255 255 / 30%);
   padding: 10px;
-  border-radius: 999px;
+  //border-radius: 999px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -133,13 +136,6 @@ const BtnBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-`;
-
-const Btn = styled.button`
-  color: ${(props) => props.theme.BtnTextColor};
-  padding: 10px 25px;
-  border-radius: 5px;
-  cursor: pointer;
 `;
 
 const EditBtn = styled(Btn)`
@@ -220,7 +216,7 @@ function ShopDetail() {
     }
   }, [shop]);
   return loading ? (
-    <span>loading...</span>
+    <Loading />
   ) : (
     <Container>
       <PageTitle title={`${shop?.name}`} />

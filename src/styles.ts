@@ -7,6 +7,7 @@ const commonTheme: CommonTheme = {
   BtnTextColor: "white",
   greenBtnColor: "#36b33b",
   redBtnColor: "#f14635",
+  grayColor: "#94949490",
 };
 
 export const lightTheme: DefaultTheme = {
