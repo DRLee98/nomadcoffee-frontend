@@ -55,6 +55,7 @@ const EditForm = styled(Form)`
 const Title = styled.h1`
   font-weight: bolder;
   font-size: 25px;
+  color: ${(props) => props.theme.fontColor};
 `;
 
 interface IEditShopForm {
