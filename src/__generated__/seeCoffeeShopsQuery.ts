@@ -29,8 +29,8 @@ export interface seeCoffeeShopsQuery_seeCoffeeShops_shops {
   id: number;
   name: string;
   user: seeCoffeeShopsQuery_seeCoffeeShops_shops_user;
-  photos: (seeCoffeeShopsQuery_seeCoffeeShops_shops_photos | null)[] | null;
-  categories: (seeCoffeeShopsQuery_seeCoffeeShops_shops_categories | null)[] | null;
+  photos: seeCoffeeShopsQuery_seeCoffeeShops_shops_photos[] | null;
+  categories: seeCoffeeShopsQuery_seeCoffeeShops_shops_categories[] | null;
 }
 
 export interface seeCoffeeShopsQuery_seeCoffeeShops {

@@ -6,14 +6,22 @@ import { useForm } from "react-hook-form";
 import { MultiImageInput } from "../components/form/MultiImageInput";
 import Button from "../components/form/Button";
 import ErrorMsg from "../components/form/ErrorMsg";
-import { gql, useApolloClient, useMutation } from "@apollo/client";
+import {
+  ApolloCache,
+  FetchResult,
+  gql,
+  useApolloClient,
+  useMutation,
+} from "@apollo/client";
 import {
   createCoffeeShopMutation,
   createCoffeeShopMutationVariables,
 } from "../__generated__/createCoffeeShopMutation";
 import { useHistory } from "react-router-dom";
+import useMe from "../hook/useMe";
 import routes from "../routes";
 import { SEE_COFFEE_SHOPS_QUERY } from "./Home";
+import { getCategoryObj } from "../utils";
 
 const CREATE_COFFEE_SHOP_MUTATION = gql`
   mutation createCoffeeShopMutation(
@@ -35,6 +43,7 @@ const CREATE_COFFEE_SHOP_MUTATION = gql`
       id
       ok
       error
+      photoUrls
     }
   }
 `;
@@ -66,17 +75,84 @@ interface IAddShopForm {
 
 function AddShop() {
   const history = useHistory();
-  const client = useApolloClient();
-  const { register, formState, handleSubmit, setValue, watch, clearErrors } =
-    useForm<IAddShopForm>({
-      mode: "onBlur",
-      reValidateMode: "onBlur",
-    });
-  const onCompleted = async (data: createCoffeeShopMutation) => {
-    const { ok, error } = data.createCoffeeShop;
-    if (ok) {
-      await client.refetchQueries({
-        include: [SEE_COFFEE_SHOPS_QUERY],
+  const { data: userData } = useMe();
+  const {
+    register,
+    formState,
+    handleSubmit,
+    setValue,
+    getValues,
+    watch,
+    clearErrors,
+  } = useForm<IAddShopForm>({
+    mode: "onBlur",
+    reValidateMode: "onBlur",
+  });
+  const updateAddCoffeeShop = (
+    cache: ApolloCache<createCoffeeShopMutation>,
+    result: FetchResult<createCoffeeShopMutation>,
+  ) => {
+    const resultData = result.data?.createCoffeeShop;
+    if (resultData?.ok && resultData?.id && userData?.me) {
+      const { name, categories } = getValues();
+      const photos: { __typename: string; url: string }[] = [];
+      if (resultData?.photoUrls && resultData?.photoUrls.length > 0) {
+        resultData.photoUrls.forEach((photo) => {
+          photos.push({ __typename: "CoffeeShopPhoto", url: photo });
+        });
+      }
+      let shopCategories: {
+        __typename: string;
+        name: string;
+        slug: any;
+      }[] = [];
+      if (categories) {
+        shopCategories = getCategoryObj(categories);
+      }
+      const newCoffeeShop = {
+        __typename: "CoffeeShop",
+        id: resultData.id,
+        name,
+        ...(photos.length > 0 && { photos }),
+        ...(shopCategories.length > 0 && { categories: shopCategories }),
+        user: {
+          ...userData.me,
+        },
+      };
+      const newCacheCoffeeShop = cache.writeFragment({
+        data: newCoffeeShop,
+        fragment: gql`
+          fragment CoffeeShopFrag on CoffeeShop {
+            id
+            name
+            photos {
+              url
+            }
+            categories {
+              name
+              slug
+            }
+            user {
+              id
+              username
+              avatarURL
+            }
+          }
+        `,
+      });
+      cache.modify({
+        id: "ROOT_QUERY",
+        fields: {
+          seeCoffeeShops(prev) {
+            const shops =
+              prev.shops.length > 9 ? prev.shops.slice(0, 9) : prev.shops;
+            return {
+              ...prev,
+              totalCount: prev.totalCount + 1,
+              shops: [newCacheCoffeeShop, ...shops],
+            };
+          },
+        },
       });
       history.push(routes.home);
     }
@@ -85,7 +161,7 @@ function AddShop() {
     createCoffeeShopMutation,
     createCoffeeShopMutationVariables
   >(CREATE_COFFEE_SHOP_MUTATION, {
-    onCompleted,
+    update: updateAddCoffeeShop,
   });
   const onSubmitValid = (data: IAddShopForm) => {
     if (loading) {

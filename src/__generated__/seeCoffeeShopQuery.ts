@@ -33,8 +33,8 @@ export interface seeCoffeeShopQuery_seeCoffeeShop {
   latitude: string | null;
   longitude: string | null;
   user: seeCoffeeShopQuery_seeCoffeeShop_user;
-  photos: (seeCoffeeShopQuery_seeCoffeeShop_photos | null)[] | null;
-  categories: (seeCoffeeShopQuery_seeCoffeeShop_categories | null)[] | null;
+  photos: seeCoffeeShopQuery_seeCoffeeShop_photos[] | null;
+  categories: seeCoffeeShopQuery_seeCoffeeShop_categories[] | null;
 }
 
 export interface seeCoffeeShopQuery {

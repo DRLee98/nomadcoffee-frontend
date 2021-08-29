@@ -8,9 +8,10 @@
 // ====================================================
 
 export interface editCoffeeShopMutation_editCoffeeShop {
-  __typename: "MutationOutput";
+  __typename: "editCoffeeShopResult";
   ok: boolean;
   error: string | null;
+  photoUrls: string[] | null;
 }
 
 export interface editCoffeeShopMutation {

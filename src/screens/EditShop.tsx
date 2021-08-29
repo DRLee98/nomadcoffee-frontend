@@ -6,7 +6,13 @@ import { useForm } from "react-hook-form";
 import { MultiImageInput } from "../components/form/MultiImageInput";
 import Button from "../components/form/Button";
 import ErrorMsg from "../components/form/ErrorMsg";
-import { gql, useApolloClient, useMutation } from "@apollo/client";
+import {
+  ApolloCache,
+  FetchResult,
+  gql,
+  useApolloClient,
+  useMutation,
+} from "@apollo/client";
 import {
   editCoffeeShopMutation,
   editCoffeeShopMutationVariables,
@@ -15,8 +21,8 @@ import { useHistory, useLocation, useParams } from "react-router-dom";
 import useMe from "../hook/useMe";
 import { useEffect } from "react";
 import routes from "../routes";
-import { SEE_COFFEE_SHOP_QUERY } from "./ShopDetail";
-import { SEE_COFFEE_SHOPS_QUERY } from "./Home";
+import { getCategoryObj } from "../utils";
+import { isJsxFragment } from "typescript";
 
 const EDIT_COFFEE_SHOP_MUTATION = gql`
   mutation editCoffeeShopMutation(
@@ -39,6 +45,7 @@ const EDIT_COFFEE_SHOP_MUTATION = gql`
     ) {
       ok
       error
+      photoUrls
     }
   }
 `;
@@ -81,30 +88,74 @@ interface IParams {
 function EditShop() {
   const history = useHistory();
   const location = useLocation<ILocation>();
-  const client = useApolloClient();
   const { id } = useParams<IParams>();
   const { data: meData } = useMe();
   const me = meData?.me;
-  const { register, formState, handleSubmit, setValue, watch, clearErrors } =
-    useForm<IEditShopForm>({
-      mode: "onBlur",
-      reValidateMode: "onBlur",
-      defaultValues: {
-        name: location?.state?.name || "",
-        categories: location?.state?.categories || "",
-      },
-    });
+  const {
+    register,
+    formState,
+    handleSubmit,
+    setValue,
+    getValues,
+    watch,
+    clearErrors,
+  } = useForm<IEditShopForm>({
+    mode: "onBlur",
+    reValidateMode: "onBlur",
+    defaultValues: {
+      name: location?.state?.name || "",
+      categories: location?.state?.categories || "",
+    },
+  });
+  const updateEditCoffeeShop = (
+    cache: ApolloCache<editCoffeeShopMutation>,
+    result: FetchResult<editCoffeeShopMutation>,
+  ) => {
+    const resultData = result.data?.editCoffeeShop;
+    if (resultData?.ok) {
+      const { name, categories } = getValues();
+      const photos: { __typename: string; url: string }[] = [];
+      if (resultData?.photoUrls && resultData?.photoUrls.length > 0) {
+        resultData.photoUrls.forEach((photo) => {
+          photos.push({ __typename: "CoffeeShopPhoto", url: photo });
+        });
+      }
+      let shopCategories: {
+        __typename: string;
+        name: string;
+        slug: any;
+      }[] = [];
+      if (categories) {
+        shopCategories = getCategoryObj(categories);
+      }
+      cache.modify({
+        id: `CoffeeShop:${id}`,
+        fields: {
+          name() {
+            if (name) {
+              return name;
+            }
+          },
+          photos() {
+            if (photos.length > 0) {
+              return photos;
+            }
+          },
+          categories() {
+            if (shopCategories.length > 0) {
+              return shopCategories;
+            }
+          },
+        },
+      });
+      history.push(routes.shopDetail(id));
+    }
+  };
   const [editCoffeeShopMutation, { loading }] = useMutation<
     editCoffeeShopMutation,
     editCoffeeShopMutationVariables
   >(EDIT_COFFEE_SHOP_MUTATION, {
-    refetchQueries: [SEE_COFFEE_SHOPS_QUERY, SEE_COFFEE_SHOP_QUERY],
-    onCompleted: async (data) => {
-      const { ok, error } = data.editCoffeeShop;
-      if (ok) {
-        history.push(routes.shopDetail(id));
-      }
-    },
+    update: updateEditCoffeeShop,
   });
   const onSubmitValid = (data: IEditShopForm) => {
     if (loading) {

@@ -46,6 +46,7 @@ const ShopList = styled.ul`
 const ShopItem = styled.li`
   border: 1px solid ${(props) => props.theme.disabledBg};
   padding: 10px;
+  box-shadow: rgb(64 60 67 / 16%) 0px 2px 5px 1px;
 `;
 
 const ShopMain = styled.div`

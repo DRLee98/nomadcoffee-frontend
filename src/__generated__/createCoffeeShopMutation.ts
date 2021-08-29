@@ -12,6 +12,7 @@ export interface createCoffeeShopMutation_createCoffeeShop {
   id: number | null;
   ok: boolean;
   error: string | null;
+  photoUrls: string[] | null;
 }
 
 export interface createCoffeeShopMutation {
