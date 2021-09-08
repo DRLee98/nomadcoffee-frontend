@@ -12,7 +12,9 @@ export interface seeCoffeeShopQuery_seeCoffeeShop_user {
   id: number;
   name: string;
   email: string;
+  username: string;
   avatarURL: string | null;
+  isMe: boolean;
 }
 
 export interface seeCoffeeShopQuery_seeCoffeeShop_photos {
@@ -26,15 +28,37 @@ export interface seeCoffeeShopQuery_seeCoffeeShop_categories {
   slug: string;
 }
 
+export interface seeCoffeeShopQuery_seeCoffeeShop_comments_user {
+  __typename: "User";
+  id: number;
+  username: string;
+  avatarURL: string | null;
+  isMe: boolean;
+}
+
+export interface seeCoffeeShopQuery_seeCoffeeShop_comments {
+  __typename: "Comment";
+  id: number;
+  payload: string;
+  totalReply: number;
+  createdAt: string;
+  user: seeCoffeeShopQuery_seeCoffeeShop_comments_user;
+}
+
 export interface seeCoffeeShopQuery_seeCoffeeShop {
   __typename: "CoffeeShop";
   id: number;
   name: string;
+  address: string | null;
   latitude: string | null;
   longitude: string | null;
+  totalLikes: number;
+  totalComments: number;
+  isLiked: boolean;
   user: seeCoffeeShopQuery_seeCoffeeShop_user;
   photos: seeCoffeeShopQuery_seeCoffeeShop_photos[] | null;
   categories: seeCoffeeShopQuery_seeCoffeeShop_categories[] | null;
+  comments: seeCoffeeShopQuery_seeCoffeeShop_comments[] | null;
 }
 
 export interface seeCoffeeShopQuery {

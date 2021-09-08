@@ -39,17 +39,23 @@ const Title = styled.h1`
 
 interface IAuthLayoutProp {
   children: React.ReactNode;
+  darkModeBtn?: boolean;
 }
 
-const AuthLayout: React.FC<IAuthLayoutProp> = ({ children }) => {
+const AuthLayout: React.FC<IAuthLayoutProp> = ({
+  children,
+  darkModeBtn = true,
+}) => {
   return (
     <Container>
       <Wrapper>
         <Title>{siteName}</Title>
         {children}
-        <BottomBox>
-          <DarkModeBtn />
-        </BottomBox>
+        {darkModeBtn && (
+          <BottomBox>
+            <DarkModeBtn />
+          </BottomBox>
+        )}
       </Wrapper>
     </Container>
   );

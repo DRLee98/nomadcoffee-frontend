@@ -1,25 +1,25 @@
-import { gql, useQuery, useReactiveVar } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import React, { useEffect } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { isLoggedInVar, logout } from "../apollo";
-import FollowButton from "../components/FollowButton";
+import { logout } from "../apollo";
 import { Loading } from "../components/Loading";
 import PageTitle from "../components/PageTitle";
 import { Btn, Image } from "../components/shared";
-import { seeProfileQuery } from "../__generated__/seeProfileQuery";
+import routes from "../routes";
+import { meQuery } from "../__generated__/meQuery";
 
-const SEE_PROFILE_QUERY = gql`
-  query seeProfileQuery($id: Int) {
-    seeProfile(id: $id) {
+const ME_QUERY = gql`
+  query meQuery {
+    me {
       id
       username
       email
       name
+      location
       avatarURL
       totalFollowing
       totalFollowers
-      isFollowing
     }
   }
 `;
@@ -36,7 +36,6 @@ const UserInfoBox = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
-  min-width: 200px;
 `;
 
 const Username = styled.span`
@@ -102,49 +101,48 @@ const LogOutBtn = styled(Btn)`
   background-color: ${(props) => props.theme.redBtnColor};
 `;
 
-interface ProfileParams {
-  id: string;
-}
-
-const Profile = () => {
-  const { id } = useParams<ProfileParams>();
-  const isLoggedIn = useReactiveVar(isLoggedInVar);
-  const { data, loading } = useQuery<seeProfileQuery>(SEE_PROFILE_QUERY, {
-    variables: {
-      id: +id,
-    },
-  });
+const MyProfile = () => {
+  const history = useHistory();
+  const { data, loading } = useQuery<meQuery>(ME_QUERY);
 
   const editProfile = () => {
-    console.log("press");
+    history.push(routes.editProfile, {
+      id: data?.me?.id,
+      username: data?.me?.username,
+      email: data?.me?.email,
+      name: data?.me?.name,
+      location: data?.me?.location,
+      avatarURL: data?.me?.avatarURL,
+    });
   };
 
   return loading ? (
     <Loading />
   ) : (
     <UserProfileContainer>
-      <PageTitle title={data?.seeProfile?.username || "Profile"} />
-      <Image sizes={"120px"} src={data?.seeProfile?.avatarURL || ""} />
+      <PageTitle title={data?.me?.username || "Profile"} />
+      <Image sizes={"120px"} src={data?.me?.avatarURL || ""} />
       <UserInfoBox>
-        <Username>{data?.seeProfile?.username}</Username>
-        <Name>{data?.seeProfile?.name}</Name>
-        <Email>{data?.seeProfile?.email}</Email>
-        {isLoggedIn && (
-          <FollowButton id={+id} isFollowing={data?.seeProfile?.isFollowing} />
-        )}
+        <Username>{data?.me?.username}</Username>
+        <Name>{data?.me?.name}</Name>
+        <Email>{data?.me?.email}</Email>
+        <ButtonBox>
+          <EditBtn onClick={editProfile}>Edit Profile</EditBtn>
+          <LogOutBtn onClick={logout}>Log Out</LogOutBtn>
+        </ButtonBox>
       </UserInfoBox>
       <FollowContainer>
         <FollowContentsBox>
           <FollowText>Followers</FollowText>
-          <FollowValue>{data?.seeProfile?.totalFollowers}</FollowValue>
+          <FollowValue>{data?.me?.totalFollowers}</FollowValue>
         </FollowContentsBox>
         <FollowContentsBox>
           <FollowText>Following</FollowText>
-          <FollowValue>{data?.seeProfile?.totalFollowing}</FollowValue>
+          <FollowValue>{data?.me?.totalFollowing}</FollowValue>
         </FollowContentsBox>
       </FollowContainer>
     </UserProfileContainer>
   );
 };
 
-export default Profile;
+export default MyProfile;

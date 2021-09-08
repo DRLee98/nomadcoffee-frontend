@@ -4,21 +4,25 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: meQuery
+// GraphQL query operation: seeProfileQuery
 // ====================================================
 
-export interface meQuery_me {
+export interface seeProfileQuery_seeProfile {
   __typename: "User";
   id: number;
   username: string;
   email: string;
   name: string;
-  location: string | null;
   avatarURL: string | null;
   totalFollowing: number;
   totalFollowers: number;
+  isFollowing: boolean;
 }
 
-export interface meQuery {
-  me: meQuery_me | null;
+export interface seeProfileQuery {
+  seeProfile: seeProfileQuery_seeProfile | null;
+}
+
+export interface seeProfileQueryVariables {
+  id?: number | null;
 }

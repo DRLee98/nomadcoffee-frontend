@@ -4,21 +4,21 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: meQuery
+// GraphQL fragment: CommentFrag
 // ====================================================
 
-export interface meQuery_me {
+export interface CommentFrag_user {
   __typename: "User";
   id: number;
   username: string;
-  email: string;
-  name: string;
-  location: string | null;
   avatarURL: string | null;
-  totalFollowing: number;
-  totalFollowers: number;
 }
 
-export interface meQuery {
-  me: meQuery_me | null;
+export interface CommentFrag {
+  __typename: "Comment";
+  id: number;
+  payload: string;
+  totalReply: number;
+  createdAt: string;
+  user: CommentFrag_user;
 }

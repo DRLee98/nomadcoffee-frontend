@@ -1,33 +1,53 @@
 import { gql, useQuery } from "@apollo/client";
+import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faCommentDots } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
+import { useLocation, useParams } from "react-router";
 import styled from "styled-components";
 import { Loading } from "../components/Loading";
 import PageTitle from "../components/PageTitle";
 import { Image } from "../components/shared";
 import { Slider } from "../components/Slider";
 import routes from "../routes";
-import { seeCoffeeShopsQuery } from "../__generated__/seeCoffeeShopsQuery";
+import {
+  seeCoffeeShopsQuery,
+  seeCoffeeShopsQuery_seeCoffeeShops,
+} from "../__generated__/seeCoffeeShopsQuery";
+import { coffeeShopsCountPageQuery } from "../__generated__/coffeeShopsCountPageQuery";
+import CategoryItem from "../components/CategoryItem";
+import Pagination from "../components/Pagination";
 
 export const SEE_COFFEE_SHOPS_QUERY = gql`
   query seeCoffeeShopsQuery($page: Int) {
     seeCoffeeShops(page: $page) {
-      totalPage
-      totalCount
-      shops {
+      id
+      name
+      totalLikes
+      totalComments
+      isLiked
+      user {
         id
-        name
-        user {
-          id
-          avatarURL
-        }
-        photos {
-          url
-        }
-        categories {
-          name
-          slug
-        }
+        username
+        avatarURL
+        isMe
       }
+      photos {
+        url
+      }
+      categories {
+        name
+        slug
+      }
+    }
+  }
+`;
+
+export const COFFEE_SHOPS_COUNT_PAGE_QUERY = gql`
+  query coffeeShopsCountPageQuery {
+    coffeeShopsCountPage {
+      totalCount
+      totalPage
     }
   }
 `;
@@ -66,6 +86,8 @@ const ShopName = styled.strong`
 
 const BigImg = styled.img`
   width: 100%;
+  max-width: 450px;
+  max-height: 450px;
 `;
 
 const ImageItem = styled.li`
@@ -81,17 +103,6 @@ const SmallImage = styled.img`
   height: 100%;
 `;
 
-const CategoryItem = styled.li`
-  border-radius: 20px;
-  border: 1px solid ${(props) => props.theme.accent};
-  font-weight: bold;
-  color: ${(props) => props.theme.accent};
-  padding: 5px 15px;
-  & + & {
-    margin-left: 5px;
-  }
-`;
-
 const UserBox = styled.div`
   position: absolute;
   bottom: 15px;
@@ -104,41 +115,96 @@ const UserBox = styled.div`
   justify-content: center;
 `;
 
+const IconBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background-color: #ffffff4d;
+  border-radius: 15px;
+  z-index: 5;
+`;
+
+const Box = styled.div``;
+
+const CountText = styled.span`
+  margin-left: 2px;
+`;
+
+const Icon = styled(FontAwesomeIcon)``;
+
 const SLink = styled(Link)`
   cursor: pointer;
 `;
 
 function Home() {
+  const location = useLocation();
+
+  const { data: pageData } = useQuery<coffeeShopsCountPageQuery>(
+    COFFEE_SHOPS_COUNT_PAGE_QUERY,
+  );
+
+  const totalPage = pageData?.coffeeShopsCountPage?.totalPage;
+  const [_, page] = location.search.split("page=");
+
   const { data, loading } = useQuery<seeCoffeeShopsQuery>(
     SEE_COFFEE_SHOPS_QUERY,
+    { variables: { page: +page } },
   );
+
   return loading ? (
     <Loading />
   ) : (
     <Container>
       <PageTitle title={"Home"} />
       <ShopList>
-        {data?.seeCoffeeShops?.shops?.map((shop) => (
-          <ShopItem key={shop?.id}>
-            <SLink to={routes.shopDetail(shop?.id)}>
-              <ShopMain>
-                <ShopName>{shop?.name}</ShopName>
-                <BigImg src={shop?.photos ? shop?.photos[0]?.url : ""} />
-                <UserBox>
-                  <Image sizes={"80px"} src={shop?.user?.avatarURL || ""} />
-                </UserBox>
-              </ShopMain>
-            </SLink>
-            <Slider slideWidth={100}>
-              {shop?.categories?.map((category) => (
-                <CategoryItem key={`category${category?.name}_${shop?.id}`}>
-                  {category?.name}
-                </CategoryItem>
-              ))}
-            </Slider>
-          </ShopItem>
-        ))}
+        {data?.seeCoffeeShops?.map(
+          (shop: seeCoffeeShopsQuery_seeCoffeeShops) => (
+            <ShopItem key={shop?.id}>
+              <SLink to={routes.shopDetail(shop?.id)}>
+                <ShopMain>
+                  <ShopName>{shop?.name}</ShopName>
+                  <BigImg src={shop?.photos ? shop?.photos[0]?.url : ""} />
+                  <UserBox>
+                    <Image sizes={"80px"} src={shop?.user?.avatarURL || ""} />
+                  </UserBox>
+                  <IconBox style={{ marginTop: 5 }}>
+                    <Box style={{ marginRight: 8 }}>
+                      <Icon
+                        icon={shop?.isLiked ? solidHeart : faHeart}
+                        color={shop?.isLiked ? "red" : "black"}
+                      />
+                      <CountText>{shop?.totalLikes}</CountText>
+                    </Box>
+                    <Box>
+                      <Icon icon={faCommentDots} />
+                      <CountText>{shop?.totalComments}</CountText>
+                    </Box>
+                  </IconBox>
+                </ShopMain>
+              </SLink>
+              <Slider slideWidth={100}>
+                {shop?.categories?.map((category) => (
+                  <CategoryItem
+                    {...category}
+                    key={`category${category?.name}_${shop?.id}`}
+                  />
+                ))}
+              </Slider>
+            </ShopItem>
+          ),
+        )}
       </ShopList>
+      {totalPage && (
+        <Pagination
+          url={routes.home}
+          totalPage={totalPage}
+          currentPage={isNaN(+page) ? 1 : +page}
+        />
+      )}
     </Container>
   );
 }

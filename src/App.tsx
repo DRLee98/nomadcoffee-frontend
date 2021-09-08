@@ -18,14 +18,22 @@ import Layout from "./components/Layout";
 import AddShop from "./screens/AddShop";
 import ShopDetail from "./screens/ShopDetail";
 import EditShop from "./screens/EditShop";
+import MyProfile from "./screens/MyProfile";
 import Profile from "./screens/Profile";
+import Category from "./screens/Category";
+import Search from "./screens/Search";
+import EditProfile from "./screens/EditProfile";
 
 const loggedInRouter = [
   { path: routes.home, screen: <Home /> },
+  { path: routes.myProfile, screen: <MyProfile /> },
+  { path: routes.editProfile, screen: <EditProfile /> },
+  { path: routes.profile(), screen: <Profile /> },
   { path: routes.addShop, screen: <AddShop /> },
   { path: routes.shopDetail(), screen: <ShopDetail /> },
   { path: routes.editShop(), screen: <EditShop /> },
-  { path: routes.myProfile, screen: <Profile /> },
+  { path: routes.category(), screen: <Category /> },
+  { path: routes.search(), screen: <Search /> },
 ];
 
 const loggedOutRouter = [

@@ -22,7 +22,6 @@ import useMe from "../hook/useMe";
 import { useEffect } from "react";
 import routes from "../routes";
 import { getCategoryObj } from "../utils";
-import { isJsxFragment } from "typescript";
 
 const EDIT_COFFEE_SHOP_MUTATION = gql`
   mutation editCoffeeShopMutation(
@@ -107,6 +106,7 @@ function EditShop() {
       categories: location?.state?.categories || "",
     },
   });
+
   const updateEditCoffeeShop = (
     cache: ApolloCache<editCoffeeShopMutation>,
     result: FetchResult<editCoffeeShopMutation>,
@@ -151,6 +151,7 @@ function EditShop() {
       history.push(routes.shopDetail(id));
     }
   };
+  
   const [editCoffeeShopMutation, { loading }] = useMutation<
     editCoffeeShopMutation,
     editCoffeeShopMutationVariables
