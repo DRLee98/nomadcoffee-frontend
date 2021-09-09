@@ -376,7 +376,11 @@ function ShopDetail() {
           </Box>
           <MapBox>
             {shop?.latitude && shop?.longitude && (
-              <KakaoMap lat={+shop?.latitude} lng={+shop?.longitude} />
+              <KakaoMap
+                lat={+shop?.latitude}
+                lng={+shop?.longitude}
+                address={shop.address}
+              />
             )}
           </MapBox>
           <BottomBox>

@@ -33,9 +33,10 @@ export const getLatLng = async (
 interface KakaoMapProp {
   lat?: number | null;
   lng?: number | null;
+  address?: string | null;
 }
 
-export const KakaoMap: React.FC<KakaoMapProp> = ({ lat, lng }) => {
+export const KakaoMap: React.FC<KakaoMapProp> = ({ lat, lng, address }) => {
   useEffect(() => {
     const mapContainer = document.getElementById("map");
     const options = {
@@ -52,7 +53,17 @@ export const KakaoMap: React.FC<KakaoMapProp> = ({ lat, lng }) => {
       });
 
       map.setCenter(position);
+    } else if (address) {
+      getLatLng(address).then(({ lat: addressLat, lng: addressLng }) => {
+        const position = new window.kakao.maps.LatLng(addressLat, addressLng);
+        new window.kakao.maps.Marker({
+          map,
+          position,
+        });
+
+        map.setCenter(position);
+      });
     }
-  }, [lat, lng]);
+  }, [lat, lng, address]);
   return <Map id="map"></Map>;
 };
