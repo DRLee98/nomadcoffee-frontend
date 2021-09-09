@@ -1,7 +1,15 @@
-import { gql, ApolloCache, FetchResult, useMutation } from "@apollo/client";
+import {
+  gql,
+  ApolloCache,
+  FetchResult,
+  useMutation,
+  useApolloClient,
+} from "@apollo/client";
 import React from "react";
 import useMe from "../hook/useMe";
+import { FOLLOW_USER_FRAGMENT, SEE_FOLLOWING_QUERY } from "../screens/Follow";
 import { followUserMutation } from "../__generated__/followUserMutation";
+import { seeFollowingQuery } from "../__generated__/seeFollowingQuery";
 import { unfollowUserMutation } from "../__generated__/unfollowUserMutation";
 import Button from "./form/Button";
 
@@ -30,6 +38,7 @@ interface FollowButtonProps {
 
 const FollowButton: React.FC<FollowButtonProps> = ({ id, isFollowing }) => {
   const { data: meData } = useMe();
+  const client = useApolloClient();
   const [followUserMutation, { data: followData, loading: followLoading }] =
     useMutation<followUserMutation>(FOLLOW_USER_MUTATION);
   const [
@@ -64,6 +73,35 @@ const FollowButton: React.FC<FollowButtonProps> = ({ id, isFollowing }) => {
         },
       },
     });
+    const readData: seeFollowingQuery | null = cache.readQuery({
+      query: SEE_FOLLOWING_QUERY,
+      variables: {
+        id: meData?.me?.id,
+      },
+    });
+    const followingUser = cache.readFragment({
+      id: `User:${id}`,
+      fragment: FOLLOW_USER_FRAGMENT,
+    });
+    const following = [
+      ...(readData?.seeFollowing.following || []),
+      followingUser,
+    ];
+    console.log(readData, followingUser);
+    if (readData) {
+      cache.writeQuery({
+        query: SEE_FOLLOWING_QUERY,
+        data: {
+          seeFollowing: {
+            ...readData.seeFollowing,
+            following,
+          },
+        },
+        variables: {
+          id: meData?.me?.id,
+        },
+      });
+    }
   };
 
   const updateUnfollowUser = (
@@ -93,6 +131,29 @@ const FollowButton: React.FC<FollowButtonProps> = ({ id, isFollowing }) => {
           },
         },
       });
+      const readData: seeFollowingQuery | null = cache.readQuery({
+        query: SEE_FOLLOWING_QUERY,
+        variables: {
+          id: meData?.me?.id,
+        },
+      });
+      console.log(readData);
+      if (readData) {
+        cache.writeQuery({
+          query: SEE_FOLLOWING_QUERY,
+          data: {
+            seeFollowing: {
+              ...readData.seeFollowing,
+              following: readData.seeFollowing.following?.filter(
+                (user) => user.id !== id,
+              ),
+            },
+          },
+          variables: {
+            id: meData?.me?.id,
+          },
+        });
+      }
     }
   };
 

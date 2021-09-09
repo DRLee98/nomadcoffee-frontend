@@ -23,12 +23,14 @@ import Profile from "./screens/Profile";
 import Category from "./screens/Category";
 import Search from "./screens/Search";
 import EditProfile from "./screens/EditProfile";
+import Follow from "./screens/Follow";
 
 const loggedInRouter = [
   { path: routes.home, screen: <Home /> },
   { path: routes.myProfile, screen: <MyProfile /> },
   { path: routes.editProfile, screen: <EditProfile /> },
   { path: routes.profile(), screen: <Profile /> },
+  { path: routes.followUser(), screen: <Follow /> },
   { path: routes.addShop, screen: <AddShop /> },
   { path: routes.shopDetail(), screen: <ShopDetail /> },
   { path: routes.editShop(), screen: <EditShop /> },

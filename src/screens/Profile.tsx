@@ -1,12 +1,13 @@
 import { gql, useQuery, useReactiveVar } from "@apollo/client";
 import React, { useEffect } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { isLoggedInVar, logout } from "../apollo";
 import FollowButton from "../components/FollowButton";
 import { Loading } from "../components/Loading";
 import PageTitle from "../components/PageTitle";
 import { Btn, Image } from "../components/shared";
+import routes from "../routes";
 import { seeProfileQuery } from "../__generated__/seeProfileQuery";
 
 const SEE_PROFILE_QUERY = gql`
@@ -56,7 +57,7 @@ const Email = styled.span`
   margin-bottom: 10px;
 `;
 
-const FollowContainer = styled.div`
+const FollowContainer = styled(Link)`
   display: flex;
   max-width: 250px;
   padding: 8px 0;
@@ -65,6 +66,7 @@ const FollowContainer = styled.div`
   justify-content: space-around;
   border: 1px solid ${(props) => props.theme.accent};
   border-radius: 5px;
+  cursor: pointer;
 `;
 
 const FollowText = styled.span`
@@ -115,10 +117,6 @@ const Profile = () => {
     },
   });
 
-  const editProfile = () => {
-    console.log("press");
-  };
-
   return loading ? (
     <Loading />
   ) : (
@@ -133,7 +131,7 @@ const Profile = () => {
           <FollowButton id={+id} isFollowing={data?.seeProfile?.isFollowing} />
         )}
       </UserInfoBox>
-      <FollowContainer>
+      <FollowContainer to={routes.followUser(id)}>
         <FollowContentsBox>
           <FollowText>Followers</FollowText>
           <FollowValue>{data?.seeProfile?.totalFollowers}</FollowValue>

@@ -112,7 +112,6 @@ const ReplyInput: React.FC<ReplyInputProps> = ({ commentId }) => {
   };
 
   const createReply = () => {
-    console.log("create");
     if (!loading && payload) {
       createReplyMutation({
         variables: {

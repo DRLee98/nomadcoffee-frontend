@@ -34,7 +34,6 @@ export const ImageInput: React.FC<ImageInputProps> = ({
 
   useEffect(() => {
     if (files && files[0]) {
-      console.log(files);
       const file = files[0];
       const reader = new FileReader();
       reader.readAsDataURL(file);

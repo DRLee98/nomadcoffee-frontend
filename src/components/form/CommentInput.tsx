@@ -112,7 +112,6 @@ const CommentInput: React.FC<CommentInputProps> = ({ shopId }) => {
   };
 
   const createComment = () => {
-    console.log("create");
     if (!loading && payload) {
       createCommentMutation({
         variables: {

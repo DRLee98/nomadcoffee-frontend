@@ -1,6 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 import React, { useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { logout } from "../apollo";
 import { Loading } from "../components/Loading";
@@ -55,7 +55,7 @@ const Email = styled.span`
   margin-bottom: 10px;
 `;
 
-const FollowContainer = styled.div`
+const FollowContainer = styled(Link)`
   display: flex;
   max-width: 250px;
   padding: 8px 0;
@@ -64,6 +64,7 @@ const FollowContainer = styled.div`
   justify-content: space-around;
   border: 1px solid ${(props) => props.theme.accent};
   border-radius: 5px;
+  cursor: pointer;
 `;
 
 const FollowText = styled.span`
@@ -131,7 +132,7 @@ const MyProfile = () => {
           <LogOutBtn onClick={logout}>Log Out</LogOutBtn>
         </ButtonBox>
       </UserInfoBox>
-      <FollowContainer>
+      <FollowContainer to={routes.followUser(data?.me?.id)}>
         <FollowContentsBox>
           <FollowText>Followers</FollowText>
           <FollowValue>{data?.me?.totalFollowers}</FollowValue>

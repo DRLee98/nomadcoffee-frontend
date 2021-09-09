@@ -288,7 +288,6 @@ function ShopDetail() {
   ) => {
     const resultData = result.data?.toggleLike;
     if (resultData) {
-      console.log(resultData);
       if (!resultData?.ok && resultData?.error) {
         console.log(resultData.error);
       } else if (resultData.isLiked) {

@@ -68,13 +68,10 @@ export const MultiImageInput: React.FC<MultiImageInputProps> = ({
   const [previewUrls, setPreviewUrls] =
     useState<{ fileName: string; src: string }[]>();
 
-  console.log(files);
-
   useEffect(() => {
     setFileList([]);
     setPreviewUrls([]);
     if (files && files.length > 0) {
-      console.log(files);
       for (let i = 0; i < files.length; i++) {
         setFileList((prev) => [files[i], ...prev]);
         const reader = new FileReader();

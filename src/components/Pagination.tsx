@@ -9,6 +9,7 @@ const Container = styled.ul`
 `;
 
 const PageBox = styled.li<PageBoxProps>`
+  pointer-events: ${(props) => (props.current ? "none" : "auto")};
   color: ${(props) => props.current && props.theme.accent};
   background-color: ${(props) => props.current && props.theme.hoverColor};
   & + & {

@@ -116,7 +116,6 @@ const Comment: React.FC<seeCoffeeShopQuery_seeCoffeeShop_comments> = ({
     if (!data?.seeReplies) {
       seeRepliesQuery({ variables: { commentId: id } });
     }
-    console.log(data);
   };
 
   return (
