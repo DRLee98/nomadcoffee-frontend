@@ -10,12 +10,12 @@ import {
   seeRepliesQuery,
   seeRepliesQueryVariables,
 } from "../__generated__/seeRepliesQuery";
+import Avatar from "./Avatar";
 import ReplyInput from "./form/ReplyInput";
 import Reply from "./Reply";
 // import ReplyInput from "./form/ReplyInput";
 // import Loading from "./Loading";
 // import Reply from "./Reply";
-import { Image } from "./shared";
 
 export const SEE_REPLIES_QUERY = gql`
   query seeRepliesQuery($commentId: Int!) {
@@ -124,7 +124,7 @@ const Comment: React.FC<seeCoffeeShopQuery_seeCoffeeShop_comments> = ({
       <CommentBox>
         <ContentsBox>
           <SLink to={user.isMe ? routes.myProfile : routes.profile(user.id)}>
-            <Image src={user.avatarURL || ""} sizes={"40px"} />
+            <Avatar url={user.avatarURL} sizes={"40px"} />
           </SLink>
           <PayloadBox>
             <Box style={{ marginBottom: 3 }}>

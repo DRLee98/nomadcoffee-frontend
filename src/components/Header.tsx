@@ -6,9 +6,9 @@ import styled from "styled-components";
 import { siteName } from "../constants";
 import useMe from "../hook/useMe";
 import routes from "../routes";
+import Avatar from "./Avatar";
 import DarkModeBtn from "./DarkMode";
 import { Input } from "./form/formShared";
-import { Image } from "./shared";
 
 const SHeader = styled.header`
   position: fixed;
@@ -108,7 +108,7 @@ const Header = () => {
         <Box>
           <SLink to={routes.addShop}>Add Shop</SLink>
           <ProfileLink to={routes.myProfile}>
-            <Image src={me?.avatarURL || ""} sizes={"25px"} />
+            <Avatar url={me?.avatarURL} sizes={"25px"} />
           </ProfileLink>
           <DarkModeBtn />
         </Box>

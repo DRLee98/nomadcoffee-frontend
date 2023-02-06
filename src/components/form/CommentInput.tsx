@@ -9,6 +9,7 @@ import {
   createCommentMutationVariables,
 } from "../../__generated__/createCommentMutation";
 import { Image } from "../shared";
+import Avatar from "../Avatar";
 
 const CREATE_COMMENT_MUTATION = gql`
   mutation createCommentMutation($shopId: Int!, $payload: String!) {
@@ -62,7 +63,7 @@ const CommentInput: React.FC<CommentInputProps> = ({ shopId }) => {
 
   const updateCreateComment = (
     cache: ApolloCache<createCommentMutation>,
-    result: FetchResult<createCommentMutation>,
+    result: FetchResult<createCommentMutation>
   ) => {
     const resultData = result.data?.createComment;
     if (meData) {
@@ -125,7 +126,7 @@ const CommentInput: React.FC<CommentInputProps> = ({ shopId }) => {
 
   return (
     <Container>
-      <Image src={meData?.me?.avatarURL || ""} sizes={"40px"} />
+      <Avatar url={meData?.me?.avatarURL} sizes={"40px"} />
       <SCommentInput
         value={payload}
         onChange={(e) => setPayload(e.target.value)}

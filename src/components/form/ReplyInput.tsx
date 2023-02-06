@@ -11,6 +11,7 @@ import { SEE_REPLIES_QUERY } from "../Comment";
 import { seeRepliesQuery } from "../../__generated__/seeRepliesQuery";
 import { Image } from "../shared";
 import useMe from "../../hook/useMe";
+import Avatar from "../Avatar";
 
 const CREATE_REPLY_MUTATION = gql`
   mutation createReplyMutation($commentId: Int!, $payload: String!) {
@@ -67,7 +68,7 @@ const ReplyInput: React.FC<ReplyInputProps> = ({ commentId }) => {
 
   const updatecreateReply = (
     cache: ApolloCache<createReplyMutation>,
-    result: FetchResult<createReplyMutation>,
+    result: FetchResult<createReplyMutation>
   ) => {
     const resultData = result.data?.createReply;
     if (meData) {
@@ -125,7 +126,7 @@ const ReplyInput: React.FC<ReplyInputProps> = ({ commentId }) => {
 
   return (
     <Container>
-      <Image src={meData?.me?.avatarURL || ""} sizes={"30px"} />
+      <Avatar url={meData?.me?.avatarURL} sizes={"30px"} />
       <SReplyInput
         value={payload}
         onChange={(e) => setPayload(e.target.value)}

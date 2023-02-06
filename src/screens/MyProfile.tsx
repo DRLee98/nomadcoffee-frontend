@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { logout } from "../apollo";
+import Avatar from "../components/Avatar";
 import { Loading } from "../components/Loading";
 import PageTitle from "../components/PageTitle";
 import { Btn, Image } from "../components/shared";
@@ -122,7 +123,7 @@ const MyProfile = () => {
   ) : (
     <UserProfileContainer>
       <PageTitle title={data?.me?.username || "Profile"} />
-      <Image sizes={"120px"} src={data?.me?.avatarURL || ""} />
+      <Avatar sizes={"120px"} url={data?.me?.avatarURL} />
       <UserInfoBox>
         <Username>{data?.me?.username}</Username>
         <Name>{data?.me?.name}</Name>

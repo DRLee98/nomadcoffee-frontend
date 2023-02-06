@@ -23,7 +23,7 @@ const PageBox = styled.li<PageBoxProps>`
   transition: all 0.2s ease;
 `;
 
-const PageNumer = styled(Link)`
+const PageNumber = styled(Link)`
   display: block;
   padding: 5px 10px;
   cursor: pointer;
@@ -63,7 +63,7 @@ const Pagination: React.FC<PaginationProps> = ({
     <Container>
       {pageArray.map((page) => (
         <PageBox current={page === currentPage} key={`page_${page}`}>
-          <PageNumer to={`${url}?page=${page}`}>{page}</PageNumer>
+          <PageNumber to={`${url}?page=${page}`}>{page}</PageNumber>
         </PageBox>
       ))}
     </Container>

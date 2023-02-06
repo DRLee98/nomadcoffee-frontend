@@ -32,6 +32,7 @@ import {
 import CommentInput from "../components/form/CommentInput";
 import Comment from "../components/Comment";
 import { KakaoMap } from "../kakao/kakaoMap";
+import Avatar from "../components/Avatar";
 
 const SEE_COFFEE_SHOP_QUERY = gql`
   query seeCoffeeShopQuery($id: Int!) {
@@ -247,7 +248,7 @@ function ShopDetail() {
     SEE_COFFEE_SHOP_QUERY,
     {
       variables: { id: +id },
-    },
+    }
   );
 
   const [deleteCoffeeShopMutation, { loading: deleteLoading }] = useMutation<
@@ -257,14 +258,14 @@ function ShopDetail() {
 
   const [toggleLikeMutation, { data: likeData, loading: likeLoading }] =
     useMutation<toggleLikeMutation, toggleLikeMutationVariables>(
-      TOGGLE_LIKE_MUTATION,
+      TOGGLE_LIKE_MUTATION
     );
 
   const shop = data?.seeCoffeeShop;
 
   const updateDeleteCoffeeShop = (
     cache: ApolloCache<deleteCoffeeShopMutation>,
-    result: FetchResult<deleteCoffeeShopMutation>,
+    result: FetchResult<deleteCoffeeShopMutation>
   ) => {
     const resultData = result.data?.deleteCoffeeShop;
     if (resultData?.ok) {
@@ -274,7 +275,7 @@ function ShopDetail() {
         fields: {
           seeCoffeeShops(prev) {
             return prev.filter(
-              (item: any) => item.__ref !== `CoffeeShop:${id}`,
+              (item: any) => item.__ref !== `CoffeeShop:${id}`
             );
           },
         },
@@ -284,7 +285,7 @@ function ShopDetail() {
 
   const updateToggleLike = (
     cache: ApolloCache<toggleLikeMutation>,
-    result: FetchResult<toggleLikeMutation>,
+    result: FetchResult<toggleLikeMutation>
   ) => {
     const resultData = result.data?.toggleLike;
     if (resultData) {
@@ -367,7 +368,7 @@ function ShopDetail() {
                   : routes.profile(shop?.user.id)
               }
             >
-              <Image sizes={"80px"} src={shop?.user?.avatarURL || ""} />
+              <Avatar sizes={"80px"} url={shop?.user?.avatarURL} />
               <Box>
                 <UserName>{shop?.user?.name}</UserName>
                 <UserEmail>{shop?.user?.email}</UserEmail>

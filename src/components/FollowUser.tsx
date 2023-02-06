@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { isLoggedInVar } from "../apollo";
 import routes from "../routes";
 import { FollowUserFragment } from "../__generated__/FollowUserFragment";
+import Avatar from "./Avatar";
 import FollowButton from "./FollowButton";
 import { Image } from "./shared";
 
@@ -56,7 +57,7 @@ const FollowUser: React.FC<FollowUserProps> = ({
   return (
     <Container>
       <SLink to={isMe ? routes.myProfile : routes.profile(id)}>
-        <Image sizes={"40px"} src={avatarURL || ""} />
+        <Avatar sizes={"40px"} url={avatarURL} />
         <Box style={{ marginLeft: 10 }}>
           <Username>{username}</Username>
           <Name>{name}</Name>

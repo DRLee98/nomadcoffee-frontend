@@ -17,6 +17,7 @@ import {
 import { coffeeShopsCountPageQuery } from "../__generated__/coffeeShopsCountPageQuery";
 import CategoryItem from "../components/CategoryItem";
 import Pagination from "../components/Pagination";
+import Avatar from "../components/Avatar";
 
 export const SEE_COFFEE_SHOPS_QUERY = gql`
   query seeCoffeeShopsQuery($page: Int) {
@@ -144,7 +145,7 @@ function Home() {
   const location = useLocation();
 
   const { data: pageData } = useQuery<coffeeShopsCountPageQuery>(
-    COFFEE_SHOPS_COUNT_PAGE_QUERY,
+    COFFEE_SHOPS_COUNT_PAGE_QUERY
   );
 
   const totalPage = pageData?.coffeeShopsCountPage?.totalPage;
@@ -152,7 +153,7 @@ function Home() {
 
   const { data, loading } = useQuery<seeCoffeeShopsQuery>(
     SEE_COFFEE_SHOPS_QUERY,
-    { variables: { page: +page } },
+    { variables: { page: +page } }
   );
 
   return loading ? (
@@ -167,9 +168,9 @@ function Home() {
               <SLink to={routes.shopDetail(shop?.id)}>
                 <ShopMain>
                   <ShopName>{shop?.name}</ShopName>
-                  <BigImg src={shop?.photos ? shop?.photos[0]?.url : ""} />
+                  {shop?.photos && <BigImg src={shop?.photos[0]?.url} />}
                   <UserBox>
-                    <Image sizes={"80px"} src={shop?.user?.avatarURL || ""} />
+                    <Avatar sizes={"80px"} url={shop?.user?.avatarURL} />
                   </UserBox>
                   <IconBox style={{ marginTop: 5 }}>
                     <Box style={{ marginRight: 8 }}>
@@ -195,7 +196,7 @@ function Home() {
                 ))}
               </Slider>
             </ShopItem>
-          ),
+          )
         )}
       </ShopList>
       {totalPage && (

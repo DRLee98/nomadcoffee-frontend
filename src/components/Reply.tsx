@@ -4,6 +4,7 @@ import styled from "styled-components";
 import routes from "../routes";
 import { seeCoffeeShopQuery_seeCoffeeShop_comments } from "../__generated__/seeCoffeeShopQuery";
 import { seeRepliesQuery_seeReplies } from "../__generated__/seeRepliesQuery";
+import Avatar from "./Avatar";
 import { Image } from "./shared";
 
 const Container = styled.li`
@@ -47,7 +48,7 @@ const Reply: React.FC<seeRepliesQuery_seeReplies> = ({
   return (
     <Container>
       <SLink to={user.isMe ? routes.myProfile : routes.profile(user.id)}>
-        <Image src={user.avatarURL || ""} sizes={"30px"} />
+        <Avatar url={user.avatarURL} sizes={"30px"} />
       </SLink>
       <Box style={{ marginLeft: 5 }}>
         <Box style={{ marginBottom: 2 }}>
