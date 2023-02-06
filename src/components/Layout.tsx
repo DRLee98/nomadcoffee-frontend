@@ -7,7 +7,7 @@ const Container = styled.div`
 
 const Content = styled.main`
   margin: 0 auto;
-  margin-top: 90px;
+  margin-top: 20px;
   max-width: ${(props) => props.theme.maxWidth};
   width: 100%;
 `;

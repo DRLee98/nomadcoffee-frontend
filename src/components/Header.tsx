@@ -11,7 +11,7 @@ import DarkModeBtn from "./DarkMode";
 import { Input } from "./form/formShared";
 
 const SHeader = styled.header`
-  position: fixed;
+  position: sticky;
   top: 0;
   z-index: 99;
   width: 100%;
