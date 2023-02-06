@@ -91,6 +91,15 @@ const BigImg = styled.img`
   max-height: 450px;
 `;
 
+const BigBlock = styled.div`
+  width: 100%;
+  max-width: 450px;
+  max-height: 450px;
+  aspect-ratio: 1;
+
+  background-color: #43a08ecc;
+`;
+
 const ImageItem = styled.li`
   width: 100px;
   height: 100px;
@@ -168,7 +177,11 @@ function Home() {
               <SLink to={routes.shopDetail(shop?.id)}>
                 <ShopMain>
                   <ShopName>{shop?.name}</ShopName>
-                  {shop?.photos && <BigImg src={shop?.photos[0]?.url} />}
+                  {shop?.photos && shop?.photos.length > 0 ? (
+                    <BigImg src={shop?.photos[0]?.url} />
+                  ) : (
+                    <BigBlock />
+                  )}
                   <UserBox>
                     <Avatar sizes={"80px"} url={shop?.user?.avatarURL} />
                   </UserBox>
