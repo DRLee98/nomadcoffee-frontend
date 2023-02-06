@@ -29,7 +29,7 @@ export const toggleDarkMode = () => {
 };
 
 const httpLink = createUploadLink({
-  uri: "https://nomad-coffee-backend-0126.herokuapp.com/graphql",
+  uri: "https://nomadcoffee-backend.up.railway.app/graphql",
   // uri: "http://localhost:4000/graphql",
 });
 
